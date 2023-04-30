@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,18 +20,18 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <span class="p-1" id="userEmail"></span>
+                    <span class="p-1" id="adminEmail"></span>
                 </li>
                 <li class="nav-item">
                     <span class="p-1">with roles:</span>
                 </li>
                 <li class="nav-item">
-                    <span class="p-1" id="userRoles"></span>
+                    <span class="p-1" id="adminRoles"></span>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="@{/logout}">Logout</a>
+                    <a class="nav-link" th:href="@{'/logout'}">Logout</a>
                 </li>
             </ul>
         </div>
@@ -43,10 +43,12 @@
 <div class="d-flex align-items-start">
     <div class="nav flex-column nav-pills me-3 col-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
         <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home"
-                type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Admin</button>
+                type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Admin
+        </button>
         <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
-                type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">User</button>
-     </div>
+                type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">User
+        </button>
+    </div>
     <div class="tab-content bg-light col-10 p-4" id="v-pills-tabContent">
         <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab"
              tabindex="0">
@@ -56,13 +58,16 @@
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
-                            type="button" role="tab" aria-controls="nav-home" aria-selected="true">Users Table</button>
+                            type="button" role="tab" aria-controls="nav-home" aria-selected="true">Users Table
+                    </button>
                     <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
-                            type="button" role="tab" aria-controls="nav-profile" aria-selected="false">New User</button>
+                            type="button" role="tab" aria-controls="nav-profile" aria-selected="false">New User
+                    </button>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
+                     tabindex="0">
 
                     <p><h5>All Users</h5></p>
 
@@ -166,8 +171,8 @@
                                                 class="form-select"
                                                 multiple
                                                 name="roles">
-                                            <option>
-                                            </option>
+                                            <option value="1">ADMIN</option>
+                                            <option value="2">USER</option>
                                         </select>
                                     </div>
 
@@ -256,6 +261,8 @@
                                     <label class="form-label fw-bold">Role</label>
                                     <select class="w-100" name="roles"
                                             multiple size="2">
+                                        <option value="1">ADMIN</option>
+                                        <option value="2">USER</option>
                                     </select>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
@@ -273,7 +280,8 @@
 
                 <!--ADD NEW USER-->
 
-                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"
+                     tabindex="0">
 
                     <p><h5>Add New User</h5></p>
 
@@ -309,15 +317,18 @@
 
                                 <div class="form-group">
                                     <label for="newRoles" class="form-label">Role </label>
-                                    <select multiple class="form-control" id="newRoles"
-                                            name="newRoles">
+                                    <select id="newRoles" class="form-select col-md-5"
+                                            name="roles" multiple="" size="2" required>
+                                        <option value="1">ADMIN</option>
+                                        <option value="2">USER</option>
                                     </select>
                                 </div>
 
 
                             </div>
                             <button type="submit" class="btn btn-lg btn-success">Add new
-                                user</button>
+                                user
+                            </button>
                         </form>
                     </div>
 

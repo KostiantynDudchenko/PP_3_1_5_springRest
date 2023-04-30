@@ -36,11 +36,6 @@ public class AdminRestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    /*@GetMapping("/user/authenticated")
-    public ResponseEntity<User> getAuthenticatedUser(@AuthenticationPrincipal User authenticatedUser) {
-          return new ResponseEntity<>(userService.findByName(authenticatedUser.getFirst_name()), HttpStatus.OK);
-    }*/
-
     @PutMapping("/admin")
     public ResponseEntity<User> update(@RequestBody User editedUser,
                          @RequestParam(value = "editedRoles", required = false) String[] editedRoles) {

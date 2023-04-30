@@ -15,6 +15,7 @@ async function fillModalForm(form, modal, id) {
     form.last_name.value = user.last_name
     form.age.value = user.age
     form.email.value = user.email
+    form.roles.value = user.roles
 }
 
 
@@ -59,52 +60,42 @@ function printUsersTable() {
 printUsersTable()
 
 //создание нового пользователя
-const form = document.forms['newUserForm'];
 
 addUser()
 
 function addUser() {
-    form.addEventListener("submit", event => {
+    newUserForm.addEventListener("submit", event => {
         event.preventDefault();
-        //let roles = getRolesFromPage(form);
+        let newUserRoles = []
+        for (let i = 0; i < newUserForm.roles.options.length; i++) {
+            if (newUserForm.roles.options[i].selected) {
+                newUserRoles.push({
+                    id: newUserForm.roles.options[i].value,
+                    authority: "ROLE_" + newUserForm.roles.options[i].text
+                })
+            }
+        }
         fetch('http://localhost:8080/api/users', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                first_name: form.newFirstName.value,
-                last_name: form.newLastName.value,
-                age: form.newAge.value,
-                email: form.newEmail.value,
-                password: form.newPassword.value,
+                first_name: newUserForm.newFirstName.value,
+                last_name: newUserForm.newLastName.value,
+                age: newUserForm.newAge.value,
+                email: newUserForm.newEmail.value,
+                password: newUserForm.newPassword.value,
+                roles: newUserRoles,
             })
         })
             .then(() => {
-                form.reset();
+                newUserForm.reset();
                 document.getElementById("nav-home-tab").click()
                 printUsersTable();
             })
     })
 }
-
-//получение ролей для нового пользователя и для редактирования уже существующего
-/*function getAllRoles(role) {
-    let roles = [];
-    if (role.indexOf("ADMIN") >= 0) {
-        roles.push({
-            "id": 1,
-            "authority": 'ROLE_ADMIN'
-        });
-    }
-    if (role.indexOf("USER") >= 0) {
-        roles.push({
-            "id": 2,
-            "authority": 'ROLE_USER'
-        });
-    }
-    return roles;
-}*/
 
 // Editing User
 async function openEditModal(id) {
@@ -117,6 +108,15 @@ editUser()
 function editUser() {
     editModalForm.addEventListener('submit', event => {
         event.preventDefault()
+        let editedUserRoles = []
+        for (let i = 0; i < editModalForm.roles.options.length; i++) {
+            if (editModalForm.roles.options[i].selected) {
+                editedUserRoles.push({
+                    id: editModalForm.roles.options[i].value,
+                    authority: 'ROLE_' + editModalForm.roles.options[i].text
+                })
+            }
+        }
 
         fetch('http://localhost:8080/api/admin', {
             method: 'PUT',
@@ -130,6 +130,7 @@ function editUser() {
                 age: editModalForm.age.value,
                 email: editModalForm.email.value,
                 password: editModalForm.password.value,
+                roles: editedUserRoles,
             })
         }).then(() => {
             editModalForm.reset();
@@ -163,15 +164,15 @@ function deleteUser() {
 
 deleteUser()
 
-// Get Authenticated User
-function getAuthenticatedUser() {
+// Get Authenticated Admin
+function getAuthenticatedAdmin() {
     fetch("http://localhost:8080/api/user")
         .then(res => res.json())
         .then(data => {
-            let email = `<span class="p-1" id="userEmail">${data.email}</span>`
-            document.querySelector("#userEmail").innerHTML = email;
+            let email = `<span class="p-1" id="adminEmail">${data.email}</span>`
+            document.querySelector("#adminEmail").innerHTML = email;
             let roles = data.roles.map(role => ' ' + role.authority.substring(5))
-            document.querySelector("#userRoles").innerHTML = roles;
+            document.querySelector("#adminRoles").innerHTML = roles;
             let user = `
                 <tr>
                     <td>${data.id}</td>
@@ -186,4 +187,4 @@ function getAuthenticatedUser() {
         })
 }
 
-getAuthenticatedUser()
+getAuthenticatedAdmin()
